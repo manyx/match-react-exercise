@@ -1,0 +1,42 @@
+<div class="modal-container">
+  <span class="close-button">
+    <button
+      (click)="close()">x
+    </button>
+  </span>
+  <span class="modal-title" mat-dialog-title>Login</span>
+  <mat-dialog-content>
+    <ng-container>
+      <div fxLayout="column" [formGroup]="form">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="margin-top-10">
+          <mat-form-field fxFlex="100" appearance="outline" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+          <mat-form-field fxFlex="100" appearance="outline" class="form-field">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="pass">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </ng-container>
+  </mat-dialog-content>
+  <div mat-dialog-actions>
+    <button
+      mat-button
+      color="primary"
+      color="primary"
+      (click)="close()">
+      Close
+    </button>
+    <button
+      *ngIf="form"
+      [disabled]="form && !form.valid"
+      mat-button
+      (click)="login()"
+      color="primary">
+      Login
+    </button>
+  </div>
+</div>

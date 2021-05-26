@@ -1,0 +1,70 @@
+.pointer {
+  cursor: pointer;
+}
+
+.text-right {
+  text-align: right;
+}
+
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.text-center {
+  text-align: center;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.close-button {
+  position: absolute;
+  top: -5px;
+  right: 10px;
+}
+
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 15px;
+}
+
+.mat-dialog-container {
+  padding: 15px 0 !important;
+  overflow: hidden !important;
+
+  .modal-container {
+    position: relative;
+
+    .modal-title {
+      padding: 0 10px 10px;
+      border-bottom: 1px solid #eee;
+      margin: 0 0 10px;
+    }
+
+    mat-dialog-content {
+      margin: 0;
+      max-height: calc(100vh - 195px);
+    }
+
+    .mat-dialog-actions {
+      border-top: 1px solid #eee;
+      padding: 0px 10px 10px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+.menu-link {
+  color: blue;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 20px;
+  &.active {
+    color: rebeccapurple;
+    text-decoration: underline;
+  }
+}
+
+.main-menu {
+  padding: 10px 20px;
+}
+.api-key-field {
+  float: right;
+}
+.logout {
+  color: red;
+}

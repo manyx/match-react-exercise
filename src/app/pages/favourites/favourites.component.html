@@ -1,0 +1,40 @@
+<div class="favourites-page" fxFlex="100" fxLayout="row wrap">
+  <h2 fxFlex="100">Favourite Movies</h2>
+
+  <div class="users-container" fxLayout="row wrap" fxLayoutGap="10px">
+    <ng-container *ngFor="let movie of favourites">
+      <div class="movie" fxFlex="0 1 24" fxFlex.lt-lg="0 1 48" fxFlex.lt-sm="0 1 95" fxLayout="row wrap">
+        <div fxFlex="calc(50px)">
+          <div fxFlex="100">
+            <app-photo-preview [size]="'40px'" [photoURL]="movie.posterURL"
+                               (click)="showMovieDetails(movie)"></app-photo-preview>
+          </div>
+        </div>
+        <div fxFlex="calc(100%-50px)" fxLayout="row wrap">
+          <div class="user-info" fxFlex="calc(100%-60px)" fxLayout="row wrap">
+            <div class="pointer bold" fxFlex="100" (click)="showMovieDetails(movie)">
+              Name: {{movie.name}}</div>
+            <div fxFlex="100">Name: {{movie.name}}</div>
+            <div fxFlex="100">Year: {{movie.year}}</div>
+          </div>
+          <div class="skill-wrapper" fxFlex="calc(60px)" fxLayout="row wrap">
+            <div fxFlex="100" class="skill-label text-center">Rating:</div>
+            <div class="skill-rating text-center pointer" fxFlex="100">
+              <span>{{ movie.rating }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div fxFlex="100" fxLayoutAlign="center center">
+          <button mat-button color="primary" *ngIf="!movie.isFavourite" (click)="addToFavourites(movie)">
+            Add to Favourites
+          </button>
+          <button mat-button color="warn" *ngIf="movie.isFavourite"
+                  (click)="removeFromFavourites(movie)">
+            Remove from Favourites
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

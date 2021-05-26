@@ -1,0 +1,12 @@
+.photo-container {
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  cursor: pointer;
+
+  img {
+    border-radius: 10px;
+  }
+}

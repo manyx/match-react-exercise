@@ -1,0 +1,91 @@
+<div class="home-page" fxFlex="100" fxLayout="row wrap">
+    <h2 fxFlex="100">Movie DB</h2>
+    <span>
+      <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Search Movies</mat-label>
+            <input matInput
+                   #searchInput
+                   [formControl]="searchField">
+        </mat-form-field>
+    </span>
+    <span>
+     <mat-form-field appearance="outline" class="btr-form-field">
+            <mat-label>Filter By Year</mat-label>
+            <mat-select [(ngModel)]="filterByYear" (selectionChange)="doYearFilter()">
+              <mat-option *ngFor="let year of movieYears"
+                      [value]="year">
+                {{ year }}
+              </mat-option>
+               <mat-option [value]="0">
+                Clear Filter
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </span>
+    <span>
+     <mat-form-field appearance="outline" class="btr-form-field">
+            <mat-label>Filter By Genre</mat-label>
+            <mat-select [(ngModel)]="filterByGenre" (selectionChange)="doGenreFilter()">
+              <mat-option *ngFor="let genre of movieGenres"
+                          [value]="genre">
+                {{ genreName[genre] }}
+              </mat-option>
+                <mat-option [value]="0">
+                Clear Filter
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </span>
+    <span>
+        <mat-form-field appearance="outline" class="btr-form-field">
+            <mat-label>Sorty By</mat-label>
+            <mat-select [(ngModel)]="sortBy" (selectionChange)="updateSort()">
+              <mat-option
+                      [value]="'year'">
+                Sort by Year
+              </mat-option>
+              <mat-option
+                      [value]="'name'">
+                Sort by Name
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </span>
+    <div class="searching" fxFlex="100" *ngIf="loading">Searching....</div>
+    <div class="movies-container" fxLayout="row wrap" fxLayoutGap="10px" fxFlex="100">
+        <ng-container *ngFor="let movie of sortedAndFilteredMovies">
+            <div class="movie" fxFlex="1 1 24" fxFlex.lt-lg="0 1 48" fxFlex.lt-sm="0 1 95" fxLayout="row wrap">
+                <div fxFlex="calc(50px)">
+                    <div fxFlex="100">
+                        <app-photo-preview [size]="'40px'" [photoURL]="movie.posterURL"
+                                           (click)="showMovieDetails(movie)"></app-photo-preview>
+                    </div>
+                </div>
+                <div fxFlex="calc(100%-50px)" fxLayout="row wrap">
+                    <div class="user-info" fxFlex="calc(100%-60px)" fxLayout="row wrap" fxLayoutAlign="start start">
+                        <div class="pointer" fxFlex="100" (click)="showMovieDetails(movie)">
+                            Name: <span class="bold">{{movie.name}}</span></div>
+                        <div fxFlex="100">Year: <span class="bold">{{movie.year}}</span></div>
+                        <div fxFlex="100" *ngIf="movie.genre.length">Genre: <span class="genre-token" *ngFor="let genre of movie.genre">{{genreName[genre]}}</span></div>
+                    </div>
+                    <div class="skill-wrapper" fxFlex="calc(60px)" fxLayout="row wrap" fxLayoutAlign="center start">
+                        <div fxFlex="100" class="skill-label text-center">Rating:</div>
+                        <div class="skill-rating text-center pointer" fxFlex="100">
+                            <span>{{ movie.rating }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div fxFlex="100" fxLayoutAlign="center center">
+                    <button mat-button color="primary" *ngIf="!movie.isFavourite" (click)="addToFavourites(movie)">
+                        Add to Favourites
+                    </button>
+                    <button mat-button color="warn" *ngIf="movie.isFavourite"
+                            (click)="removeFromFavourites(movie)">
+                        Remove from Favourites
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

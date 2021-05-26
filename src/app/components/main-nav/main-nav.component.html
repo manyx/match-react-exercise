@@ -1,0 +1,17 @@
+<div class="main-menu">
+    <span class="menu-link" [routerLink]="'/home'" routerLinkActive="active">Home</span>
+    <span class="menu-link" *ngIf="user && user.id" [routerLink]="'/favourites'"
+          routerLinkActive="active">Favourites</span>
+    <span class="menu-link menu-logged" *ngIf="user && user.id">Logged in with: {{user.name}}</span>
+    <span class="menu-link menu-logged logout" *ngIf="user && user.id" (click)="logout()">Log Out</span>
+    <span class="menu-not-logged menu-link" *ngIf="!user?.id" (click)="doLogin()">Login</span>
+    <span class="api-key-field">
+        <mat-form-field appearance="outline" class="form-field" *ngIf="user && user.id">
+            <mat-label>API Key</mat-label>
+            <input matInput
+                   #apiKeyInput
+                   [(ngModel)]="apiKey"
+                   (ngModelChange)="apiKeyChanged(apiKeyInput.value)">
+        </mat-form-field>
+    </span>
+</div>

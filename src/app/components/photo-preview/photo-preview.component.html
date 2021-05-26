@@ -1,0 +1,11 @@
+<div class="photo-container"
+     *ngIf="photoURL"
+     [ngStyle]="{'height': size, 'width': size}">
+    <img class="photo-tag"
+         *ngIf="photoURL"
+         [ngStyle]=" {'height': size, 'width': size }"
+         src="{{photoURL}}"/>
+</div>
+
+
+
