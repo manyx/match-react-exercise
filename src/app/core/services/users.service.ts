@@ -30,7 +30,6 @@ export class UserService {
 
     public loginUser(user: IUser): Observable<IUser> {
         const foundUserIndex = this.users.findIndex(usr => usr.email === user.email && usr.pass === user.pass);
-        console.log(user);
         if (foundUserIndex > -1) {
             return of(this.users[foundUserIndex]);
         } else {

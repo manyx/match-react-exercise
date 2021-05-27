@@ -69,7 +69,6 @@ export class MainNavComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.usersService.loginUser(result).subscribe(res => {
-                    console.log(res);
                     if (res && res.id) {
                         this.stateService.setUser(res);
                     } else {
@@ -82,7 +81,7 @@ export class MainNavComponent implements OnInit, OnDestroy {
     }
 
     apiKeyChanged(key: string) {
-        localStorage.setItem('apiKey', this.apiKey);
+        this.stateService.setApiKey(key);
     }
 
 }

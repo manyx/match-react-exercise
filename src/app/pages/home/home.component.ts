@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PhotoModalComponent } from '@components/photo-modal/photo-modal.component';
@@ -16,10 +22,11 @@ import { IGenre, IMovie, IUser } from '../../interfaces';
     styleUrls: ['./home.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
     movies: IMovie[] = [];
     favourites: IMovie[] = [];
     moviesSubscription: Subscription;
+    apiKeySubscription: Subscription;
     sortBy = 'name';
     activeUser: IUser;
     searchTerm: string;
@@ -28,6 +35,7 @@ export class HomeComponent implements OnInit {
     filterByYear: number;
     filterByGenre: number;
     genreName: any;
+    firstLoad = true;
 
     get movieYears() {
         const uniqueYears = [...new Set(this.movies.map(mov => mov.year))].sort((a, b) => {
@@ -69,8 +77,10 @@ export class HomeComponent implements OnInit {
         private toastr: ToastrService,
         private apiService: ApiService
     ) {
-        this.readFavourites();
-        this.fetchGenres();
+        this.searchField = new FormControl();
+        this.apiKeySubscription = this.stateService.getApiKey().subscribe(apiKey => {
+            this.searchMovies(this.searchField.value);
+        });
         this.moviesSubscription = this.stateService.getUser().subscribe(user => {
             if (user && user.id) {
                 this.activeUser = user;
@@ -83,7 +93,7 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.searchField = new FormControl();
+        this.fetchGenres();
         this.searchField.valueChanges.pipe(
             debounceTime(600),
             distinctUntilChanged(),
@@ -92,7 +102,33 @@ export class HomeComponent implements OnInit {
             }),
             tap(_ => (this.loading = false))
         ).subscribe(term => {
-            this.apiService.search(term).subscribe(res => {
+            this.searchMovies(term);
+        });
+        this.readFavourites();
+    }
+
+    ngOnDestroy() {
+        if (this.apiKeySubscription) {
+            this.apiKeySubscription.unsubscribe();
+        }
+        if (this.moviesSubscription) {
+            this.moviesSubscription.unsubscribe();
+        }
+    }
+
+    searchMovies(term: string) {
+        if (!term) {
+            return
+        }
+        if (!this.genreName) {
+            this.fetchGenres();
+        } else {
+            this.doMovieSearch(term);
+        }
+    }
+
+    doMovieSearch(term: string) {
+        this.apiService.search(term).subscribe(res => {
                 let newMovie: IMovie;
                 this.movies = [];
                 res.results.forEach(movie => {
@@ -111,18 +147,31 @@ export class HomeComponent implements OnInit {
                 });
                 this.doSort();
                 this.cdr.markForCheck();
-
-            })
-        });
+            },
+            err => {
+                if (!this.firstLoad) {
+                    this.toastr.error('API Key invalid');
+                }
+            });
     }
 
     fetchGenres() {
         this.apiService.getGenres().subscribe(res => {
-            this.genreName = res.genres.reduce((map: any, genre: IGenre) => {
-                map[genre.id as any] = genre.name;
-                return map;
-            }, {});
-        })
+                this.genreName = res.genres.reduce((map: any, genre: IGenre) => {
+                    map[genre.id as any] = genre.name;
+                    return map;
+                }, {});
+                if (this.searchField.value) {
+                    this.doMovieSearch(this.searchField.value);
+                }
+                this.firstLoad = false;
+            },
+            err => {
+                if (!this.firstLoad) {
+                    this.toastr.error('API Key invalid');
+                }
+                this.firstLoad = false;
+            })
     }
 
     readFavourites() {

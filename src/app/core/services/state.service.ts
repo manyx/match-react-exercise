@@ -9,6 +9,7 @@ import { IUser } from '../../interfaces';
 })
 export class StateService {
     private user: BehaviorSubject<IUser> = new BehaviorSubject({});
+    private apiKey: BehaviorSubject<string> = new BehaviorSubject('');
 
     constructor(
         private router: Router,
@@ -22,6 +23,11 @@ export class StateService {
         this.user.next(user);
     }
 
+    public setApiKey(apiKey: string) {
+        localStorage.setItem('apiKey', apiKey);
+        this.apiKey.next(apiKey);
+    }
+
     public checkLocalStorage() {
         const localUserString = localStorage.getItem('user');
         if (localUserString) {
@@ -30,9 +36,17 @@ export class StateService {
                 this.setUser(localUserObject);
             }
         }
+        const localStorageApiKey = localStorage.getItem('apiKey');
+        if (localStorageApiKey) {
+            this.apiKey.next(localStorageApiKey);
+        }
     }
 
     public getUser(): Observable<IUser> {
         return this.user.asObservable();
+    }
+
+    public getApiKey(): Observable<string> {
+        return this.apiKey.asObservable();
     }
 }
