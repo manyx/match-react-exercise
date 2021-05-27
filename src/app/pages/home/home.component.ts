@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit {
         if (this.filterByGenre) {
             sortedAndFilteredMovies = [...sortedAndFilteredMovies.filter(mov => mov.genre.includes(this.filterByGenre))];
         }
+
         return sortedAndFilteredMovies;
     }
 
@@ -165,6 +166,7 @@ export class HomeComponent implements OnInit {
                 return a.name.localeCompare(b.name);
             });
         }
+        this.cdr.markForCheck();
     }
 
     addToFavourites(movie: IMovie) {

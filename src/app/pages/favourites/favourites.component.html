@@ -12,9 +12,8 @@
         </div>
         <div fxFlex="calc(100%-50px)" fxLayout="row wrap">
           <div class="user-info" fxFlex="calc(100%-60px)" fxLayout="row wrap">
-            <div class="pointer bold" fxFlex="100" (click)="showMovieDetails(movie)">
-              Name: {{movie.name}}</div>
-            <div fxFlex="100">Name: {{movie.name}}</div>
+            <div class="pointer" fxFlex="100" (click)="showMovieDetails(movie)">
+              Name: <span class="bold">{{movie.name}}</span></div>
             <div fxFlex="100">Year: {{movie.year}}</div>
           </div>
           <div class="skill-wrapper" fxFlex="calc(60px)" fxLayout="row wrap">

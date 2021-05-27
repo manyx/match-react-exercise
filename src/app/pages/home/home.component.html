@@ -66,7 +66,6 @@
                         <div class="pointer" fxFlex="100" (click)="showMovieDetails(movie)">
                             Name: <span class="bold">{{movie.name}}</span></div>
                         <div fxFlex="100">Year: <span class="bold">{{movie.year}}</span></div>
-                        <div fxFlex="100" *ngIf="movie.genre.length">Genre: <span class="genre-token" *ngFor="let genre of movie.genre">{{genreName[genre]}}</span></div>
                     </div>
                     <div class="skill-wrapper" fxFlex="calc(60px)" fxLayout="row wrap" fxLayoutAlign="center start">
                         <div fxFlex="100" class="skill-label text-center">Rating:</div>
@@ -75,7 +74,9 @@
                         </div>
                     </div>
                 </div>
-
+                <div fxFlex="100" fxLayoutAlign="start center">
+                    <div fxFlex="100" *ngIf="movie.genre.length"><span class="genre-token" *ngFor="let genre of movie.genre">{{genreName[genre]}}</span></div>
+                </div>
                 <div fxFlex="100" fxLayoutAlign="center center">
                     <button mat-button color="primary" *ngIf="!movie.isFavourite" (click)="addToFavourites(movie)">
                         Add to Favourites
